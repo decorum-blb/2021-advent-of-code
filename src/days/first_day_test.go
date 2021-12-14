@@ -1,12 +1,9 @@
 package main
 
 import (
-	"io/ioutil"
-	"strconv"
-	"strings"
+	"github.com/decorum-blb/2021-advent-of-code/readfile"
 	"testing"
 )
-
 func TestEmptyInput(t *testing.T) {
 	actual := CountLargerMeasurements([]int{})
 
@@ -43,7 +40,7 @@ func TestTwoElementsWhereSecondIsGreater(t *testing.T) {
 }
 
 func TestAdventOfCodeTestData(t *testing.T) {
-	data, err := readFile("./dayone_test_data.txt")
+	data, err := readfile.ReadFile("./first_day_test_data.txt")
 
 	if err != nil {
 		panic(err)
@@ -54,33 +51,4 @@ func TestAdventOfCodeTestData(t *testing.T) {
 	if actual != 1139 {
 		t.Errorf("Actual = %d; Should have been 1139", actual)
 	}
-}
-
-// It would be better for such a function to return error, instead of handling
-// it on their own.
-func readFile(fname string) (nums []int, err error) {
-	b, err := ioutil.ReadFile(fname)
-	if err != nil {
-		return nil, err
-	}
-
-	lines := strings.Split(string(b), "\n")
-	// Assign cap to avoid resize on every append.
-	nums = make([]int, 0, len(lines))
-
-	for _, l := range lines {
-		// Empty line occurs at the end of the file when we use Split.
-		if len(l) == 0 {
-			continue
-		}
-		// Atoi better suits the job when we know exactly what we're dealing
-		// with. Scanf is the more general option.
-		n, err := strconv.Atoi(l)
-		if err != nil {
-			return nil, err
-		}
-		nums = append(nums, n)
-	}
-
-	return nums, nil
 }
